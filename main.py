@@ -1,4 +1,5 @@
 from datetime import date
+from flask import request
 from flask import Flask, abort, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
@@ -226,12 +227,21 @@ def about():
     return render_template("about.html")
 
 
-@app.route("/contact")
+@app.route("/contact", methods=["GET", "POST"])
 def contact():
-    return render_template("contact.html")
+    if request.method == "POST":
+        name = request.form.get("name")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
+        message = request.form.get("message")
 
+        # You can print or process data here
+        print(name, email, phone, message)
+
+        return render_template("contact.html", msg_sent=True)
+
+    return render_template("contact.html", msg_sent=False)
 
 if __name__ == "__main__":
-    app.run(debug=False, port=5002)
-def handler(request):
-    return app
+    app.run(debug=True, port=5002)
+
